@@ -16,12 +16,21 @@ resources:
       env:
         SAML2AWS_PASSWORD: $(SAML2AWS_PASSWORD)
 
-steps:
+stages:
+# Continuous Deployment steps
+- stage: CD
+  pool:
+    vmImage: $(vmImage)  
 
-- task: KubernetesManifest@0
-  inputs:
-    action: 'deploy'
-    kubernetesServiceConnection: 'Kubernetes-wicar-test'
-    namespace: 'sandbox-wicar-ypvvv'
-    manifests: $(System.DefaultWorkingDirectory)/k8s/*
-    containers: cd
+  jobs:
+  - job: "bla"
+    container: cd
+    steps:
+    - task: Kubernetes@1
+      displayName: 'Apply manifests'
+      inputs:
+        connectionType: Kubernetes Service Connection
+        kubernetesServiceEndpoint: 'Kubernetes-wicar-test'
+        namespace: 'sandbox-wicar-ypvvv'
+        command: apply
+        arguments: '-f $(System.DefaultWorkingDirectory)/k8s/'
