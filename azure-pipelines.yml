@@ -6,9 +6,6 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'ubuntu-latest'
-
 resources:
   containers:
     - container: cd
@@ -20,7 +17,7 @@ stages:
 # Continuous Deployment steps
 - stage: CD
   pool:
-    vmImage: $(vmImage)  
+    vmImage: 'ubuntu-latest'  
 
   jobs:
   - job: "bla"
