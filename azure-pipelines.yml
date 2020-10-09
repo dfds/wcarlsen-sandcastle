@@ -23,11 +23,18 @@ stages:
   - job: "bla"
     container: cd
     steps:
-    - task: Kubernetes@1
-      displayName: 'Apply manifests'
+    # - task: Kubernetes@1
+    #   displayName: 'Apply manifests'
+    #   inputs:
+    #     connectionType: Kubernetes Service Connection
+    #     kubernetesServiceEndpoint: 'Kubernetes-wicar-test'
+    #     namespace: 'sandbox-wicar-ypvvv'
+    #     command: apply
+    #     arguments: '-f $(System.DefaultWorkingDirectory)/k8s/'
+
+    - task: KubernetesManifest@0
       inputs:
-        connectionType: Kubernetes Service Connection
-        kubernetesServiceEndpoint: 'Kubernetes-wicar-test'
+        action: 'deploy'
+        kubernetesServiceConnection: 'Kubernetes-wicar-test'
         namespace: 'sandbox-wicar-ypvvv'
-        command: apply
-        arguments: '-f $(System.DefaultWorkingDirectory)/k8s/'
+        manifests: '$(System.DefaultWorkingDirectory)/k8s/'
