@@ -9,6 +9,13 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+resources:
+  containers:
+    - container: cd
+      image: wcarlsen/saml2aws-kubernetes-service-connection:latest
+      env:
+        SAML2AWS_PASSWORD: $(SAML2AWS_PASSWORD)
+
 steps:
 - task: KubernetesManifest@0
   inputs:
@@ -16,4 +23,4 @@ steps:
     kubernetesServiceConnection: 'Kubernetes-wicar-test'
     namespace: 'sandbox-wicar-ypvvv'
     manifests: $(System.DefaultWorkingDirectory)/k8s/
-    containers: 'wcarlsen/saml2aws-kubernetes-service-connection:latest'
+    containers: cd
