@@ -17,10 +17,20 @@ resources:
         SAML2AWS_PASSWORD: $(SAML2AWS_PASSWORD)
 
 steps:
+- task: PublishBuildArtifacts@1
+  displayName: "Publish Artifact: manifests"
+  inputs:
+    PathtoPublish: k8s
+    ArtifactName: manifests
+
+- publish: $(Pipeline.Workspace)/manifests/
+  artifact: deployed-manifests
+  displayName: 'Publish Artifact: manifests'
+
 - task: KubernetesManifest@0
   inputs:
     action: 'deploy'
     kubernetesServiceConnection: 'Kubernetes-wicar-test'
     namespace: 'sandbox-wicar-ypvvv'
-    manifests: $(System.DefaultWorkingDirectory)/k8s/
+    manifests: '$(Pipeline.Workspace)/manifests/'
     containers: cd
